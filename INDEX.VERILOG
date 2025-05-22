@@ -1,0 +1,25 @@
+module sync_ram #(
+    parameter ADDR_WIDTH = 4,              // 4-bit address = 16 locations
+    parameter DATA_WIDTH = 8               // 8-bit data per location
+)(
+    input clk,
+    input we,                              // write enable
+    input re,                              // read enable
+    input [ADDR_WIDTH-1:0] addr,
+    input [DATA_WIDTH-1:0] din,            // data input
+    output reg [DATA_WIDTH-1:0] dout       // data output
+);
+
+    // Memory array
+    reg [DATA_WIDTH-1:0] mem [0:(1<<ADDR_WIDTH)-1];
+
+    always @(posedge clk) begin
+        if (we) begin
+            mem[addr] <= din;             // Write operation
+        end
+        if (re) begin
+            dout <= mem[addr];            // Read operation
+        end
+    end
+
+endmodule
